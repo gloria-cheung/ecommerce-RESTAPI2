@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import jsonify
 from models import db, Cart, CartItem
 from flask_login import current_user, login_required
 from __main__ import app
