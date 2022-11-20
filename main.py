@@ -82,6 +82,16 @@ def login():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/auth/logout', methods=["POST"])
+def logout():
+    try:
+        logout_user()
+        return jsonify({"success": "logout successful"})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 ## USER ROUTES
 # update user
 @app.route('/api/users/<int:user_id>', methods=["PATCH"])
@@ -108,24 +118,51 @@ def update_user(user_id):
 
 
 # delete user
-@app.route('/api/auth/users/<int:user_id>', methods=["DELETE"])
-def delete_user():
-    pass
+@app.route('/api/users/<int:user_id>', methods=["DELETE"])
+def delete_user(user_id):
+    try:
+        if current_user.get_id() != str(user_id):
+            return jsonify({"error": "can only delete own user"}), 400
+
+        found_user = User.query.get(user_id)
+        if not found_user:
+            return jsonify({"error": "cannot find user with that user_id"}), 400
+        else:
+            db.session.delete(found_user)
+            db.session.commit()
+
+            return jsonify({"success": "user deleted"})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # get user (only admin has access)
-@app.route('/api/auth/users/find/<int:user_id>')
-def get_user():
-    pass
+@app.route('/api/users/find/<int:user_id>')
+@admin_only
+def get_user(user_id):
+    try:
+        found_user = User.query.get(user_id)
+        if not found_user:
+            return jsonify({"error": "cannot find user with that user_id"}), 400
+        else:
+            return jsonify(found_user.obj_to_dict())
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 # get all users (only admin has access)
-@app.route('/api/auth/users/')
+@app.route('/api/users/')
+@admin_only
 def get_users():
-    pass
+    try:
+        users = User.query.all()
+        result = [user.obj_to_dict() for user in users]
+        return jsonify(users=result)
 
-
-# get user stats for given month of current year(only admin has access)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
