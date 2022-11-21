@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from models import db, User
 from functools import wraps
+from flask_cors import CORS
 
 
 load_dotenv()
@@ -13,6 +14,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = mysql
 app.config['SECRET_KEY'] = secret_key
 db.init_app(app)
+CORS(app)
 
 
 # Authenticate
