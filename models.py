@@ -44,9 +44,10 @@ class UserAddress(db.Model):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False, unique=True)
-    desc = db.Column(db.String(250), nullable=False)
+    desc = db.Column(db.Text, nullable=False)
     inventory = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
+    img_url = db.Column(db.String(250), nullable=False)
     created_on = db.Column(db.DateTime, server_default=db.func.now())
     updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
