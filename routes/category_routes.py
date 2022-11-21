@@ -54,14 +54,25 @@ def delete_category(category_id):
 
 
 # get category
-@app.route('/api/categories/<int:category_id>')
-def get_category(category_id):
+@app.route('/api/categories/<name>')
+def get_category(name):
     try:
-        found_category = Category.query.get(category_id)
+        found_category = Category.query.filter_by(name=name).first()
         if not found_category:
             return jsonify({"error": "could not find category"}), 400
         products = [product.obj_to_dict() for product in found_category.products]
         return jsonify(products=products, category_name=found_category.name)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# get categories
+@app.route('/api/categories/')
+def get_categories():
+    try:
+        categories = Category.query.all()
+        return jsonify(categories=[category.obj_to_dict() for category in categories])
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
