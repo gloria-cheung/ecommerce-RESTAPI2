@@ -41,6 +41,7 @@ def create_product():
             inventory=int(data.get("inventory")),
             price=float(data.get("price")),
             category_id=int(data.get("category_id")),
+            img_url=data.get("img_url")
         )
         db.session.add(new_product)
         db.session.commit()
