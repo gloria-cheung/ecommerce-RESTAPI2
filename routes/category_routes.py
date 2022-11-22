@@ -68,7 +68,7 @@ def get_category(name):
 
 
 # get categories
-@app.route('/api/categories')
+@app.route('/api/categories/')
 def get_categories():
     try:
         categories = Category.query.all()
