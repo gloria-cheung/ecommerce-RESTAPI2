@@ -11,7 +11,14 @@ def get_cart():
         found_cart = Cart.query.filter_by(user_id=int(current_user.get_id())).first()
         if not found_cart:
             return jsonify({"error": "could not find cart based on user_id"})
-        return jsonify(cart=found_cart.obj_to_dict(), cart_items=[item.obj_to_dict() for item in found_cart.cart_items])
+
+        cart_items = []
+        for item in found_cart.cart_items:
+            result = item.obj_to_dict()
+            result["product"] = item.product.obj_to_dict()
+            cart_items.append(result)
+
+        return jsonify(cart=found_cart.obj_to_dict(), cart_items=cart_items)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
