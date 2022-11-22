@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 # create category
-@app.route('/api/categories/', methods=["POST"])
+@app.route('/api/categories', methods=["POST"])
 @admin_only
 def create_category():
     data = request.json
@@ -68,7 +68,7 @@ def get_category(name):
 
 
 # get categories
-@app.route('/api/categories/')
+@app.route('/api/categories')
 def get_categories():
     try:
         categories = Category.query.all()

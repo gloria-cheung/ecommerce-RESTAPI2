@@ -30,7 +30,7 @@ def get_products():
 
 
 # create product
-@app.route('/api/products/', methods=["POST"])
+@app.route('/api/products', methods=["POST"])
 @admin_only
 def create_product():
     data = request.json

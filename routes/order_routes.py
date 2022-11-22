@@ -5,7 +5,7 @@ from __main__ import app
 
 
 # get orders
-@app.route('/api/orders/')
+@app.route('/api/orders')
 @login_required
 def get_orders():
     try:
@@ -32,7 +32,7 @@ def get_order(order_id):
 
 
 # create order
-@app.route('/api/orders/', methods=["POST"])
+@app.route('/api/orders', methods=["POST"])
 @login_required
 def create_order():
     try:

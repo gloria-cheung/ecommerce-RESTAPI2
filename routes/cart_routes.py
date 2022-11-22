@@ -34,7 +34,7 @@ def create_cart():
 
 
 # clear cart of items
-@app.route('/api/cart/', methods=["PATCH"])
+@app.route('/api/cart', methods=["PATCH"])
 @login_required
 def update_cart():
     try:

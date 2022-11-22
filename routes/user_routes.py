@@ -65,7 +65,7 @@ def get_user(user_id):
 
 
 # get all users (only admin has access)
-@app.route('/api/users/')
+@app.route('/api/users')
 @admin_only
 def get_users():
     try:

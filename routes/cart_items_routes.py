@@ -5,7 +5,7 @@ from __main__ import app
 
 
 # create cart item
-@app.route('/api/cart_items/', methods=["POST"])
+@app.route('/api/cart_items', methods=["POST"])
 @login_required
 def add_cart_item_to_cart():
     data = request.json
