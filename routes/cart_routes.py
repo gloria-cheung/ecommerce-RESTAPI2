@@ -6,12 +6,11 @@ from __main__ import app
 
 # get cart
 @app.route('/api/cart')
-@login_required
 def get_cart():
     try:
         found_cart = Cart.query.filter_by(user_id=int(current_user.get_id())).first()
         if not found_cart:
-            return jsonify({"error": "could not find cart based on user_id"}), 400
+            return jsonify({"error": "could not find cart based on user_id"})
         return jsonify(cart=found_cart.obj_to_dict(), cart_items=[item.obj_to_dict() for item in found_cart.cart_items])
 
     except Exception as e:
@@ -19,7 +18,7 @@ def get_cart():
 
 
 # create cart
-@app.route('/api/cart/', methods=["POST"])
+@app.route('/api/cart', methods=["POST"])
 @login_required
 def create_cart():
     try:
