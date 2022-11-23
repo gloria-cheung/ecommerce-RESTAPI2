@@ -20,7 +20,9 @@ def add_cart_item_to_cart():
         found_cart.total += Product.query.get(int(data.get("product_id"))).price * int(data.get("quantity"))
         db.session.add(new_cart_item)
         db.session.commit()
-        return jsonify({"success": "item successfully added to cart"})
+        result = new_cart_item.obj_to_dict()
+        result["product"] = new_cart_item.product.obj_to_dict()
+        return jsonify(result)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
