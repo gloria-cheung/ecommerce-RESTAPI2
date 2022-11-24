@@ -25,7 +25,14 @@ def get_order(order_id):
         found_order = Order.query.get(order_id)
         if not found_order:
             return jsonify({"error": "could not find order based on order_id"}), 400
-        return jsonify(order=found_order.obj_to_dict(), order_items=[item.obj_to_dict() for item in found_order.order_items])
+
+        order_items = []
+        for item in found_order.order_items:
+            result = item.obj_to_dict()
+            result["product"] = item.product.obj_to_dict()
+            order_items.append(result)
+
+        return jsonify(order=found_order.obj_to_dict(), order_items=order_items)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -59,5 +66,7 @@ def create_order():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
 
 
