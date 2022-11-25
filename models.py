@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     address = relationship("UserAddress", back_populates="user")
     cart = relationship("Cart", back_populates="user")
     orders = relationship("Order", back_populates="user")
+    wish_list = relationship("WishList", back_populates="user")
 
     def obj_to_dict(self):
         dictionary = {}
@@ -54,6 +55,7 @@ class Product(db.Model):
     category = relationship("Category", back_populates="products")
     cart_item = relationship("CartItem", back_populates="product")
     order_item = relationship("OrderItem", back_populates="product")
+    wish_list_item = relationship("WishListItem", back_populates="product")
 
     def obj_to_dict(self):
         dictionary = {}
@@ -142,3 +144,35 @@ class OrderItem(db.Model):
         for column in self.__table__.columns:
             dictionary[column.name] = getattr(self, column.name)
         return dictionary
+
+
+class WishList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = relationship("User", back_populates="wish_list")
+    wish_list_items = relationship("WishListItem", back_populates="wish_list")
+    created_on = db.Column(db.DateTime, server_default=db.func.now())
+    updated_on = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
+    def obj_to_dict(self):
+        dictionary = {}
+        # Loop through each column in the data record
+        for column in self.__table__.columns:
+            dictionary[column.name] = getattr(self, column.name)
+        return dictionary
+
+
+class WishListItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    wishlist_id = db.Column(db.Integer, db.ForeignKey("wish_list.id"))
+    wish_list = relationship("WishList", back_populates="wish_list_items")
+    product_id = db.Column(db.Integer, db.ForeignKey("product.id"))
+    product = relationship("Product", back_populates="wish_list_item")
+
+    def obj_to_dict(self):
+        dictionary = {}
+        # Loop through each column in the data record
+        for column in self.__table__.columns:
+            dictionary[column.name] = getattr(self, column.name)
+        return dictionary
+
