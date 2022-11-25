@@ -5,10 +5,15 @@ from datetime import datetime
 
 
 # get product
-@app.route('/api/products/<int:product_id>')
-def get_product(product_id):
+@app.route('/api/products/')
+def get_product():
+    product_id = request.args.get("product_id")
+    name = request.args.get("name")
     try:
-        found_product = Product.query.get(product_id)
+        if product_id:
+            found_product = Product.query.get(int(product_id))
+        else:
+            found_product = Product.query.filter_by(name=name.replace("%20", " ")).first()
         if not found_product:
             return jsonify({"error": "could not find product"}), 400
         return jsonify(found_product.obj_to_dict())
@@ -16,17 +21,17 @@ def get_product(product_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-# get all products
-@app.route('/api/products/', methods=["GET"])
-def get_products():
-    try:
-        products = Product.query.all()
-        results = [product.obj_to_dict() for product in products]
-        return jsonify(products=results)
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+#
+# # get all products
+# @app.route('/api/products/', methods=["GET"])
+# def get_products():
+#     try:
+#         products = Product.query.all()
+#         results = [product.obj_to_dict() for product in products]
+#         return jsonify(products=results)
+#
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
 
 
 # create product
