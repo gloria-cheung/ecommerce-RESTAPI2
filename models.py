@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     cart = relationship("Cart", back_populates="user")
     orders = relationship("Order", back_populates="user")
     wish_list = relationship("WishList", back_populates="user")
+    newsletter = relationship("Newsletter", back_populates="user")
 
     def obj_to_dict(self):
         dictionary = {}
@@ -176,3 +177,16 @@ class WishListItem(db.Model):
             dictionary[column.name] = getattr(self, column.name)
         return dictionary
 
+
+class Newsletter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(250), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = relationship("User", back_populates="newsletter")
+
+    def obj_to_dict(self):
+        dictionary = {}
+        # Loop through each column in the data record
+        for column in self.__table__.columns:
+            dictionary[column.name] = getattr(self, column.name)
+        return dictionary
