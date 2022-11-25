@@ -40,7 +40,7 @@ def admin_only(f):
 
 
 # ROUTES
-from routes import auth_routes, user_routes, category_routes, product_routes, cart_routes, cart_items_routes, order_routes, checkout_routes, wishlist_routes
+from routes import auth_routes, user_routes, category_routes, product_routes, cart_routes, cart_items_routes, order_routes, checkout_routes, wishlist_routes, newsletter_routes
 
 
 if __name__ == "__main__":
