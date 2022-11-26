@@ -34,7 +34,7 @@ def create_cart():
         )
         db.session.add(new_cart)
         db.session.commit()
-        return jsonify(new_cart.obj_to_dict())
+        return jsonify(cart=new_cart.obj_to_dict(), cart_items=[item.obj_to_dict() for item in new_cart.cart_items])
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
